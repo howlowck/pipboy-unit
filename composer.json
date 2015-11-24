@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "name": "howlowck/pipboy-unit",
+    "description": "Build and Test your PIPBoy!",
+    "keywords": ["workshop", "testing"],
     "license": "MIT",
     "type": "project",
     "require": {
