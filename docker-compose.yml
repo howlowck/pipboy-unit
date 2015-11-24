@@ -1,0 +1,54 @@
+#source:
+#  build: ./.docker/web
+#  user: www-data
+#  volumes:
+#    - ./:/var/www/html
+web:
+  build: ./.docker/web
+  ports:
+    - "80"
+  volumes:
+    - ./:/var/www/html
+  links:
+    - php
+php:
+  build: ./.docker/php-fpm
+  user: www-data
+  volumes:
+    - ./:/var/www/html
+  links:
+    - db
+  entrypoint: ["bash","/sbin/php-fpm/entrypoint.sh"]
+db:
+  image: sameersbn/mysql
+  ports:
+   - "3306"
+  volumes:
+   - /var/lib/mysql
+  environment:
+   - DB_NAME=pipboy_local
+   - DB_USER=homestead
+   - DB_PASS=secret
+composer:
+  build: ./.docker/php-cli
+  volumes:
+   - ./:/var/www/html
+  working_dir: /var/www/html
+  entrypoint: ["composer", "--ansi"]
+  command: ["--help"]
+artisan:
+  build: ./.docker/php-cli
+  volumes:
+   - ./:/var/www/html
+  working_dir: /var/www/html
+  links:
+   - db
+  entrypoint: ["php", "artisan"]
+  command: ["list"]
+phpunit:
+  build: ./.docker/php-cli
+  volumes:
+   - ./:/var/www/html
+  working_dir: /var/www/html
+  entrypoint: ["./vendor/bin/phpunit"]
+  command: ["-v"]
